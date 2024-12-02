@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* Font definitions */
+      @font-face {
+        font-family: "naim";
+        src: url("font/bbbb.ttf");
+      }
+      @font-face {
+        font-family: "naim2";
+        src: url("font/Doctor Glitch.ttf");
+      }
+
+      /* Global styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      /* Main container styles */
+      .container {
+        background-color: #cb9df0;
+        width: 100%;
+        height: 100vh;
+        padding: 80px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .child-container {
+        background-color: #fbfbfb;
+        width: 500px;
+        height: auto;
+        box-shadow: 2px 2px 15px black;
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+      }
+
+      /* Logo styles */
+      #logo {
+        color: #3b1e54;
+        font-family: "naim";
+        font-size: 45px;
+        margin-bottom: 20px;
+      }
+
+      /* Input and button styles */
+      #button3 input {
+        border-radius: 50em;
+        background-color: #eeeeee;
+        outline: none;
+        border: transparent;
+        padding: 1rem;
+        width: 75%;
+        font-size: 16px;
+      }
+
+      #button4 {
+        background-color: #9b7ebd;
+        padding: 15px;
+        border-radius: 50em;
+        width: 100px;
+        font-size: 15px;
+        border: none;
+        outline: none;
+        color: white;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      .parent-button {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      /* Task list styles */
+      ul {
+        list-style-type: none;
+        margin: 20px 0 0;
+        padding: 0;
+      }
+
+      li {
+        background: #f4f4f4;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      li.checked {
+        text-decoration: line-through;
+        color: #aaa;
+      }
+
+      /* Close button styles */
+      .close-btn {
+        color: red;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main container -->
+    <div class="container">
+      <div class="child-container">
+        <h1 id="logo">
+          <i class="fa-regular fa-pen-to-square"></i> To-do List
+        </h1>
+
+        <!-- Input field and add button -->
+        <div class="parent-button" id="button3">
+          <input
+            type="text"
+            id="input-box"
+            placeholder="Enter your task here..."
+          />
+          <button id="button4" onclick="addTask()">Add</button>
+        </div>
+
+        <!-- Task list -->
+        <ul id="list-Container"></ul>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      // Get references to the input box and the list container
+      const inputbox = document.getElementById("input-box");
+      const listContainer = document.getElementById("list-Container");
+
+      // Function to add a new task
+      function addTask() {
+        // Check if the input field is empty
+        if (inputbox.value === "") {
+          alert("khali hai bhar le isse!"); // Show an alert if the input is empty
+          return; // Stop further execution
+        }
+
+        // Create a new list item (task)
+        let newTask = document.createElement("li");
+        newTask.innerHTML = inputbox.value; // Set the task text from the input box
+        listContainer.appendChild(newTask); // Add the task to the list container
+
+
+// Create a close button for the task
+        let closeBtn = document.createElement("span"); // Use a <span> for the close button
+        closeBtn.innerHTML = "\u00d7"; // Add the '×' symbol to the button
+        closeBtn.classList.add("close-btn"); // Add a class for styling the button
+        newTask.appendChild(closeBtn); // Append the close button to the task item
+
+        inputbox.value = ""; // Clear the input field for the next task
+
+        saveData(); // Save the current state of the task list to local storage
+      }
+
+      // Add event listener to handle task interactions (toggle and delete)
+      listContainer.addEventListener(
+        "click",
+        function (e) {
+          // Check if a task (list item) was clicked
+          if (e.target.tagName === "LI") {
+            e.target.classList.toggle("checked"); // Toggle the 'checked' class to mark the task as complete
+            saveData(); // Save the updated state
+          }
+          // Check if the close button was clicked
+          else if (e.target.tagName === "SPAN") {
+            e.target.parentElement.remove(); // Remove the task item
+            saveData(); // Save the updated state
+          }
+        },
+        false
+      );
+
+      // Function to save the current task list to local storage
+      function saveData() {
+        localStorage.setItem("data", listContainer.innerHTML); // Store the list container's HTML
+      }
+
+      // Function to load tasks from local storage when the page is loaded
+      function ShowTask() {
+        listContainer.innerHTML = localStorage.getItem("data"); // Retrieve and set tasks from local storage
+      }
+      ShowTask(); // Call ShowTask to load saved tasks
+    </script>
+  </body>
+</html>
